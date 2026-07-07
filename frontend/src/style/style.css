@@ -1,0 +1,13 @@
+body {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+label {
+    display: flex;
+}
+
+label .must {
+    color: red;
+    margin-left: 5px;
+}
