@@ -1,6 +1,18 @@
 import { createUser } from './scripts/api/create.js';
 import { renderUsers, findUserById } from './scripts/dom/render.js';
+import { deleteUser } from './scripts/api/delete.js';
+import { updateUser, patchUser } from './script/api/update.js';
 
+//DOM
+const formTitle = document.getElementById('form-title');
+const submitBtn = form.querySelector('button[type="submit"]');
+const cancelBtn = document.getElementById('cancel-edit');
+
+// Estado de edição:
+let editingId = null;
+let originalUser = null;
+
+//Criação do usuário 
 form.add.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -31,4 +43,99 @@ function showError(message) {
 function hideError() {
     formError.classList.add('d-none');
     formError.textContent = '';
+}
+
+//função auxiliar
+function getUserFromCard(button) {
+    const card = button.closest('.user-card');
+    return findUserById(Number(card.id));
+}
+
+const usersSection = document.getElementById('users');
+
+usersSection.addEventListener('click', async (event) => {
+    const { target } = event;
+
+    if (target.dataset.action === 'edit') {
+        enterEditMode(getUserFromCard(target));
+    }
+
+    if(target.dataset.action === 'delete') {
+        const user = getUserFormCard(target);
+
+        if(!confirm('Are you sure you want to delete this user?')) return;
+    
+        try {
+            await deleteUser(apiUrl, user.id);
+
+            if (editingId === user.id) exitEditMode();
+            
+            renderUsers(apiUrl);
+        } catch (error) {
+            showError(error.message);
+        }
+    }
+});
+
+//Edia usuário baseado no id
+function enterEditMode(user) {
+    editingId = user.id;
+    //Cria uma cópia para comparar a nova versão com a cópia da antiga
+    originalUser = { ...user };
+
+    document.getElementById('name').value = user.name;
+    document.getElementById('age').value = user.age;
+    document.getElementById('email').value = user.email;
+
+    formTitle.textContent = 'Edit User';
+    submitBtn.textContent = 'Update';
+    cancelBtn.style.display = '';
+
+    document.getElementById('name').focus();
+}
+
+//reseta e limpa oestado voltando para o Create User
+function exitEditMode() {
+    editingId = null;
+    originalUser = null;
+    formTitle.textContent = 'Create User';
+    submitBtn.textContent = 'Create';
+    cancelBtn.style.display = 'none';
+    form.reset();
+}
+
+cancelBtn.addEventListener('click', exitEditMode);
+
+// Verificação se está editando
+try {
+    if (editingId !== null) {
+        // === MODO EDIÇÃO ===
+        const changed = {};
+        if (name !== originalUser.name) changed.name = name;
+        if (Number(age) !== originalUser.age) changed.age = age;
+        if (email !== originalUser.email) changed.email = email;
+
+        // Nada mudou? Sai da edição.
+        if (Object.keys(changed).length === 0) {
+            exitEditMode();
+            return;
+        }
+
+        // Todos mudaram → PUT; alguns → PATCH
+        const allChanged = Object.keys(changed).length === 3;
+
+        if (allChanged) {
+            await updateUser(apiUrl, editingId, { name, age, email });
+        } else {
+            await patchUser(apiUrl, editingId, changed);
+        }
+    } else {
+        // === MODO CRIAÇÃO ===
+        await createUser(apiUrl, { name, age, email });
+    }
+
+    exitEditMode();
+    renderUsers(apiUrl);
+} catch (error) {
+    showError(error.message);
 }
