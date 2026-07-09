@@ -1,11 +1,23 @@
 {
-    "nextId": 2,
+    "nextId": 6,
     "users": [
         {
-            "name": "Teste",
-            "age": 29,
-            "email": "rsmorozini@gmail.com",
-            "id": 1
+            "name": "Gabriel",
+            "age": 21,
+            "email": "patched@example.com",
+            "id": 2
+        },
+        {
+            "name": "felipe domareski",
+            "age": 20,
+            "email": "domareskifelipe44@escola.pr.gov.br",
+            "id": 3
+        },
+        {
+            "name": "opoikp",
+            "age": 150,
+            "email": "guygyu@yyyy.com",
+            "id": 4
         }
     ]
 }

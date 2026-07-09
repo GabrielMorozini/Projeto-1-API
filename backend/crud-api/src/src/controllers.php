@@ -47,7 +47,7 @@ function handlePatch(string $dataFile): void {
     try {
         $input = json_decode(file_get_contents('php://input'), true);
         $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
-        respond(editUser($dataFile, $id, $input));
+        respond(editUser($dataFile, $id, $input, partial: true));
     } catch (\Throwable $e) {
         http_response_code(500);
         echo json_encode(['error' => 'Internal Server Error']);

@@ -47,7 +47,7 @@ function editUser(string $dataFile, ?int $id, ?array $input, bool $partial = fal
         if ($error) {
             return ['error' => $error, 'status' => 400];
         }
-}
+    }
 
     $error = validateUserFields($input);
     if ($error) {
