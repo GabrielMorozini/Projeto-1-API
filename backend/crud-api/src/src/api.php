@@ -2,6 +2,8 @@
 
 require_once __DIR__ . '/controllers.php';
 
+$dataFile = __DIR__ . '/../../data/data.json';
+
 $method = $_SERVER['REQUEST_METHOD'];
 
 match ($method) {

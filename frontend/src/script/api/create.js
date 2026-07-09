@@ -1,15 +1,15 @@
-export async function createUser(apiUrl, {name, age, email}) {
-    const response = await fetch (apiUrl, {
+export async function createUser(apiUrl, { name, age, email }) {
+    const response = await fetch(apiUrl, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({name, age: number(age), email})
-    })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, age: Number(age), email })
+    });
 
-const data = await response.json();
+    const data = await response.json();
 
-if (!response.ok) {
-    throw new Error(data.message || 'Failed to create user');
-}
+    if (!response.ok) {
+        throw new Error(data.message || data.error || 'Failed to create user');
+    }
 
-return data;
+    return data;
 }

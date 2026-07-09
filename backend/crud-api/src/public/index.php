@@ -11,16 +11,16 @@ header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(240);
+    http_response_code(204);
     exit;
 }
 
 $uri = strtok($_SERVER['REQUEST_URI'], '?');
 
-match($uri) {
-  '/api/users' => require __DIR__ . '/../src/api.php',
-  '/docs' => serveView(__DIR__ . '/../views/docs.html'), //verificar esse caminho
-  '/openapi.json' => serveJson(__DIR__ . '/../openapi.json'), //essa tbm
+match ($uri) {
+    '/api/users' => require __DIR__ . '/../src/api.php',
+    '/docs' => serveView(__DIR__ . '/../views/docs.html'),
+    '/openapi.json' => serveJson(__DIR__ . '/../openapi.json'),
     default => notFound(),
 };
 

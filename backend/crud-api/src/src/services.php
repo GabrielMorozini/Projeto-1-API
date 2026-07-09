@@ -5,7 +5,7 @@ require_once __DIR__ . '/data.php';
 
 function getAllUsers(string $dataFile): array {
     $data = loadData($dataFile);
-    return ['users' => $data, 'status' => 200];
+    return ['users' => $data['users'] ?? [], 'status' => 200];
 }
 
 function createUser(string $dataFile, ?array $input): array {

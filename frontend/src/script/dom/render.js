@@ -1,11 +1,11 @@
-import { getUser } from "../api/get.js";
+import { getUsers } from "../api/read.js";
 
-let usersCache = []
+let usersCache = [];
 
-export function findUserById(id) {
+export async function renderUsers(apiUrl) {
     const users = await getUsers(apiUrl);
     usersCache = users;
-    const usersSection =document.getElementById('users');
+    const usersSection = document.getElementById('users');
 
     if (users.length === 0) {
         usersSection.innerHTML = '<p class="text-muted">No users found.</p>';
@@ -14,7 +14,7 @@ export function findUserById(id) {
 
     usersSection.innerHTML = '';
 
-    users.forEach(user) => {
+    users.forEach((user) => {
         const userDiv = document.createElement('div');
         userDiv.classList.add('col-md-3');
 
@@ -32,5 +32,9 @@ export function findUserById(id) {
             </div>
         `;
         usersSection.appendChild(userDiv);
-    }
+    });
+}
+
+export function findUserById(id) {
+    return usersCache.find((user) => user.id === id);
 }
