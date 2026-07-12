@@ -2,12 +2,12 @@
 require_once __DIR__ . '/services.php';
 
 function respond(array $result): void {
-    http_response_code($result['status']);
+    http_response_code($result['status']); //define status HTTP
 
-    if (isset($result['error'])) {
-        echo json_encode(['error' => $result['error']]);
+    if (isset($result['error'])) { //se a chave for error
+        echo json_encode(['error' => $result['error']]); //devolve o erro em json
     } else {
-        echo json_encode($result['data']);
+        echo json_encode($result['data']); //senão dados em json
     }
 }
 

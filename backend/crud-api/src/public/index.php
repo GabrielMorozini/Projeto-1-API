@@ -5,17 +5,18 @@ require_once __DIR__ . '/openapi.php';
 
 $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
+//CORS
 in_array($origin, $allowedOrigins) ?
-    header("Access-Control-Allow-Origin: $origin") : null;
-header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type');
+    header("Access-Control-Allow-Origin: $origin") : null; // O origin acessa a API se estiver em $allowedOrigins
+header('Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS'); // Acesso as funções da API
+header('Access-Control-Allow-Headers: Content-Type'); // quais headers podem ser enviados na requisição
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(204);
+    http_response_code(204); // Envia uma resposta de sucesso sem conteúdo
     exit;
 }
 
-$uri = strtok($_SERVER['REQUEST_URI'], '?');
+$uri = strtok($_SERVER['REQUEST_URI'], '?'); //Remove query string da URI 
 
 match ($uri) {
     '/api/users' => require __DIR__ . '/../src/api.php',
